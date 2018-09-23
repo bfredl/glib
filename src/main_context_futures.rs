@@ -405,7 +405,7 @@ impl MainContext {
 }
 
 #[cfg(feature = "futures-nightly")]
-impl Executor for MainContext {
+impl Spawn for MainContext {
     fn spawn(&mut self, f: Box<Future<Item = (), Error = Never> + Send>) -> Result<(), SpawnError> {
         let f = f.pin();
         let source = TaskSource::new(::PRIORITY_DEFAULT, f);
@@ -415,7 +415,7 @@ impl Executor for MainContext {
 }
 
 #[cfg(not(feature = "futures-nightly"))]
-impl Executor for MainContext {
+impl Spawn for MainContext {
     fn spawn(&mut self, f: Box<Future<Item = (), Error = Never> + Send>) -> Result<(), SpawnError> {
         let f = Box::new(f);
         let source = TaskSource::new(::PRIORITY_DEFAULT, f);
